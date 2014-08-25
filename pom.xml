@@ -27,7 +27,7 @@
 			<version>1</version>
 		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<plugins>
 			<plugin>
@@ -39,6 +39,7 @@
 					<source>1.6</source>
 				</configuration>
 			</plugin>
+			
 		</plugins>
 	</build>
 

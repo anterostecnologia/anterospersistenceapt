@@ -540,7 +540,7 @@ public class EntitySerializer implements Serializer {
 
     protected void introJavadoc(CodeWriter writer, EntityType model) throws IOException {
         Type queryType = typeMappings.getPathType(model, model, true);
-        writer.javadoc(queryType.getSimpleName() + " is a Querydsl query type for " +
+        writer.javadoc(queryType.getSimpleName() + " is a query type for " +
         model.getSimpleName());
     }
 

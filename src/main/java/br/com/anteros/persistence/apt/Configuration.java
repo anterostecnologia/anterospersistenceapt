@@ -32,7 +32,7 @@ import br.com.anteros.persistence.apt.codegen.TypeMappings;
 import br.com.anteros.persistence.dsl.osql.util.Annotations;
 
 /**
- * Configuration defines the configuration options for APT based Querydsl code generation
+ * Configuration defines the configuration options for APT based dsl code generation
  *
  * @author tiwe
  *

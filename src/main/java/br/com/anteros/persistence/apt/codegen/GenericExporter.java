@@ -63,9 +63,9 @@ import com.google.common.collect.Sets;
 /**
  * GenericExporter provides query type serialization logic for cases where APT annotation processors
  * can't be used. GenericExporter scans the classpath for classes annotated with specified annotations
- * in specific packages and mirrors them into Querydsl expression types.
+ * in specific packages and mirrors them into dsl expression types.
  *
- * <p>Example with Querydsl annotations: </p>
+ * <p>Example with dsl annotations: </p>
  * <pre>
  * {@code
  * GenericExporter exporter = new GenericExporter();

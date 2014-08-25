@@ -118,8 +118,8 @@ public class DefaultConfiguration implements Configuration {
             entityAnnotations.add(embeddableAnn);
         }
         for (Element element : roundEnv.getElementsAnnotatedWith(Config.class)) {
-            Config querydslConfig = element.getAnnotation(Config.class);
-            SerializerConfig config = SimpleSerializerConfig.getConfig(querydslConfig);
+            Config dslConfig = element.getAnnotation(Config.class);
+            SerializerConfig config = SimpleSerializerConfig.getConfig(dslConfig);
             if (element instanceof PackageElement) {
                 PackageElement packageElement = (PackageElement)element;
                 packageToConfig.put(packageElement.getQualifiedName().toString(), config);

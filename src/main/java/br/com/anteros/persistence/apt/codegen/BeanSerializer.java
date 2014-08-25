@@ -64,7 +64,7 @@ public class BeanSerializer implements Serializer{
      * Create a new BeanSerializer
      */
     public BeanSerializer() {
-        this(true, " is a Querydsl bean type");
+        this(true, " is a bean type");
     }
 
     /**
@@ -82,7 +82,7 @@ public class BeanSerializer implements Serializer{
      * @param propertyAnnotations
      */
     public BeanSerializer(boolean propertyAnnotations) {
-        this(propertyAnnotations, " is a Querydsl bean type");
+        this(propertyAnnotations, " is a bean type");
     }
 
     /**

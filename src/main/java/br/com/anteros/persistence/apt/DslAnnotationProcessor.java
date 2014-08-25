@@ -27,14 +27,14 @@ import br.com.anteros.persistence.dsl.osql.annotations.QuerySupertype;
 import br.com.anteros.persistence.dsl.osql.annotations.QueryTransient;
 
 /**
- * Default annotation processor for Querydsl which handles {@link QueryEntity}, {@link QuerySupertype}, 
+ * Default annotation processor for dsl which handles {@link QueryEntity}, {@link QuerySupertype}, 
  * {@link QueryEmbeddable}, {@link QueryEmbedded} and {@link QueryTransient}
  * 
  * @author tiwe
  *
  */
-@SupportedAnnotationTypes({"com.mysema.query.annotations.*"})
-public class QuerydslAnnotationProcessor extends AbstractDslProcessor {
+@SupportedAnnotationTypes({"br.com.anteros.persistence.dsl.osql.annotations.*"})
+public class DslAnnotationProcessor extends AbstractDslProcessor {
     
     @Override
     protected Configuration createConfiguration(RoundEnvironment roundEnv) {

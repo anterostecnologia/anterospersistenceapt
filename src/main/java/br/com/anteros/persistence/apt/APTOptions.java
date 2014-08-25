@@ -14,7 +14,7 @@
 package br.com.anteros.persistence.apt;
 
 /**
- * APT options supported by Querydsl
+ * APT options supported by dsl
  *
  * @author tiwe
  *

@@ -16,7 +16,7 @@ package br.com.anteros.persistence.apt.codegen;
 import br.com.anteros.persistence.apt.codegen.model.Type;
 
 /**
- * QueryTypeFactory defines an interface for mapping domain types to Querydsl expression types
+ * QueryTypeFactory defines an interface for mapping domain types to dsl expression types
  *
  * @author tiwe
  *

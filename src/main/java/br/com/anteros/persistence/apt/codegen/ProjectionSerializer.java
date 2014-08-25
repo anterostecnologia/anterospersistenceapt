@@ -67,7 +67,7 @@ public final class ProjectionSerializer implements Serializer{
         writer.imports(Expression.class, ConstructorExpression.class, Generated.class);
 
         // javadoc
-        writer.javadoc(queryType + " is a Querydsl Projection type for " + simpleName);
+        writer.javadoc(queryType + " is a Projection type for " + simpleName);
 
         writer.line("@Generated(\"", getClass().getName(), "\")");
 

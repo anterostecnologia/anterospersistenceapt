@@ -64,7 +64,7 @@ import br.com.anteros.persistence.dsl.osql.annotations.QueryExclude;
 import br.com.anteros.persistence.dsl.osql.annotations.QueryProjection;
 
 /**
- * Base class for Querydsl annotation processors, contains the main processing logic. The subclasses
+ * Base class for dsl annotation processors, contains the main processing logic. The subclasses
  * just provide the configuration.
  *
  * @author tiwe
@@ -72,7 +72,6 @@ import br.com.anteros.persistence.dsl.osql.annotations.QueryProjection;
  */
 public abstract class AbstractDslProcessor extends AbstractProcessor {
 
-    // TODO replace with proper injections in Querydsl 4.0.0
     public static Types TYPES;
 
     public static Elements ELEMENTS;
