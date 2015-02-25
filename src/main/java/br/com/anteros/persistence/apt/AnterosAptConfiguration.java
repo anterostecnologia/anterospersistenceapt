@@ -42,7 +42,6 @@ import br.com.anteros.persistence.metadata.annotation.Id;
 import br.com.anteros.persistence.metadata.annotation.JoinColumn;
 import br.com.anteros.persistence.metadata.annotation.MapKeyEnumerated;
 import br.com.anteros.persistence.metadata.annotation.Temporal;
-import br.com.anteros.persistence.metadata.annotation.Transient;
 import br.com.anteros.persistence.metadata.annotation.Version;
 import br.com.anteros.persistence.metadata.annotation.type.FetchMode;
 
@@ -77,7 +76,7 @@ public class AnterosAptConfiguration extends DefaultConfiguration {
 		return ImmutableList.of(Column.class, Enumerated.class,
 				GeneratedValue.class, Id.class, CompositeId.class,
 				JoinColumn.class, Fetch.class, MapKeyEnumerated.class,
-				ForeignKey.class, Temporal.class, Transient.class,
+				ForeignKey.class, Temporal.class,
 				Version.class);
 	}
 
