@@ -39,6 +39,7 @@ import br.com.anteros.persistence.metadata.annotation.Fetch;
 import br.com.anteros.persistence.metadata.annotation.ForeignKey;
 import br.com.anteros.persistence.metadata.annotation.GeneratedValue;
 import br.com.anteros.persistence.metadata.annotation.Id;
+import br.com.anteros.persistence.metadata.annotation.Index;
 import br.com.anteros.persistence.metadata.annotation.JoinColumn;
 import br.com.anteros.persistence.metadata.annotation.MapKeyEnumerated;
 import br.com.anteros.persistence.metadata.annotation.Temporal;
@@ -77,7 +78,7 @@ public class AnterosAptConfiguration extends DefaultConfiguration {
 				GeneratedValue.class, Id.class, CompositeId.class,
 				JoinColumn.class, Fetch.class, MapKeyEnumerated.class,
 				ForeignKey.class, Temporal.class,
-				Version.class);
+				Version.class, Index.class);
 	}
 
 	@Override
