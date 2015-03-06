@@ -16,6 +16,8 @@ package br.com.anteros.persistence.apt.codegen.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import br.com.anteros.persistence.dsl.osql.types.IndexHint;
+
 /**
  * TypeCategory defines the expression type used for a Field
  * 
@@ -93,7 +95,9 @@ public enum TypeCategory {
      *
      */
     TIME(COMPARABLE, java.sql.Time.class.getName(), "org.joda.time.LocalTime",
-            "java.time.LocalTime", "java.time.OffsetTime");
+            "java.time.LocalTime", "java.time.OffsetTime"),
+            
+    INDEX(null);
 
     private final TypeCategory superType;
 

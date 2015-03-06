@@ -1,15 +1,11 @@
 /*
  * Copyright 2011, Mysema Ltd
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+ * applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
  */
 package br.com.anteros.persistence.apt;
 
@@ -33,14 +29,18 @@ import br.com.anteros.persistence.apt.codegen.Property;
 import br.com.anteros.persistence.apt.codegen.QueryTypeFactory;
 import br.com.anteros.persistence.apt.codegen.TypeMappings;
 import br.com.anteros.persistence.apt.codegen.model.Constructor;
+import br.com.anteros.persistence.apt.codegen.model.IndexClassType;
 import br.com.anteros.persistence.apt.codegen.model.Parameter;
 import br.com.anteros.persistence.apt.codegen.model.Type;
 import br.com.anteros.persistence.apt.codegen.model.TypeCategory;
 import br.com.anteros.persistence.dsl.osql.annotations.PropertyType;
 import br.com.anteros.persistence.dsl.osql.annotations.QueryInit;
 import br.com.anteros.persistence.dsl.osql.annotations.QueryType;
+import br.com.anteros.persistence.dsl.osql.types.IndexHint;
 import br.com.anteros.persistence.dsl.osql.util.Annotations;
 import br.com.anteros.persistence.dsl.osql.util.BeanUtils;
+import br.com.anteros.persistence.metadata.annotation.Index;
+import br.com.anteros.persistence.metadata.annotation.Indexes;
 
 import com.google.common.collect.ImmutableList;
 
@@ -50,168 +50,190 @@ import com.google.common.collect.ImmutableList;
  * @author tiwe
  *
  */
-public final class TypeElementHandler {
+public final class TypeElementHandler { 
 
-    private final TypeMappings typeMappings;
+	private final TypeMappings typeMappings;
 
-    private final QueryTypeFactory queryTypeFactory;
+	private final QueryTypeFactory queryTypeFactory;
 
-    private final Configuration configuration;
+	private final Configuration configuration;
 
-    private final ExtendedTypeFactory typeFactory;
+	private final ExtendedTypeFactory typeFactory;
 
-    public TypeElementHandler(Configuration configuration, ExtendedTypeFactory typeFactory,
-            TypeMappings typeMappings, QueryTypeFactory queryTypeFactory) {
-        this.configuration = configuration;
-        this.typeFactory = typeFactory;
-        this.typeMappings = typeMappings;
-        this.queryTypeFactory = queryTypeFactory;
-    }
+	public TypeElementHandler(Configuration configuration, ExtendedTypeFactory typeFactory, TypeMappings typeMappings,
+			QueryTypeFactory queryTypeFactory) {
+		this.configuration = configuration;
+		this.typeFactory = typeFactory;
+		this.typeMappings = typeMappings;
+		this.queryTypeFactory = queryTypeFactory;
+	}
 
-    public EntityType handleEntityType(TypeElement element) {
-        EntityType entityType = typeFactory.getEntityType(element.asType(), true);
-        List<? extends Element> elements = element.getEnclosedElements();
-        VisitorConfig config = configuration.getConfig(element, elements);
-        Set<String> blockedProperties = new HashSet<String>();
-        Map<String, TypeMirror> propertyTypes = new HashMap<String, TypeMirror>();
-        Map<String, TypeMirror> fixedTypes = new HashMap<String, TypeMirror>();
-        Map<String, Annotations> propertyAnnotations = new HashMap<String, Annotations>();
+	public EntityType handleEntityType(TypeElement element) {
+		EntityType entityType = typeFactory.getEntityType(element.asType(), true);
+		List<? extends Element> elements = element.getEnclosedElements();
+		VisitorConfig config = configuration.getConfig(element, elements);
+		Set<String> blockedProperties = new HashSet<String>();
+		Map<String, TypeMirror> propertyTypes = new HashMap<String, TypeMirror>();
+		Map<String, TypeMirror> fixedTypes = new HashMap<String, TypeMirror>();
+		Map<String, Annotations> propertyAnnotations = new HashMap<String, Annotations>();
 
-        // constructors
-        if (config.visitConstructors()) {
-            handleConstructors(entityType, elements);
-        }
+		// constructors
+		if (config.visitConstructors()) {
+			handleConstructors(entityType, elements);
+		}
 
-        // fields
-        if (config.visitFieldProperties()) {
-            for (VariableElement field : ElementFilter.fieldsIn(elements)) {
-                String name = field.getSimpleName().toString();
-                if (configuration.isBlockedField(field)) {
-                    blockedProperties.add(name);
-                } else if (configuration.isValidField(field)) {
-                    Annotations annotations = new Annotations();
-                    configuration.inspect(field, annotations);
-                    annotations.addAnnotation(field.getAnnotation(QueryType.class));
-                    annotations.addAnnotation(field.getAnnotation(QueryInit.class));
-                    propertyAnnotations.put(name, annotations);
-                    propertyTypes.put(name, field.asType());
-                    TypeMirror fixedType = configuration.getRealType(field);
-                    if (fixedType != null) {
-                        fixedTypes.put(name, fixedType);
-                    }
-                }
-            }
-        }
+		// @Index e @Indexes
+		handleIndexes(entityType, element);
 
-        // methods
-        if (config.visitMethodProperties()) {
-            for (ExecutableElement method : ElementFilter.methodsIn(elements)) {
-                String name = method.getSimpleName().toString();
-                if (name.startsWith("get") && name.length() > 3 && method.getParameters().isEmpty()) {
-                    name = BeanUtils.uncapitalize(name.substring(3));
-                } else if (name.startsWith("is") && name.length() > 2 && method.getParameters().isEmpty()) {
-                    name = BeanUtils.uncapitalize(name.substring(2));
-                } else {
-                    continue;
-                }
+		// fields
+		if (config.visitFieldProperties()) {
+			for (VariableElement field : ElementFilter.fieldsIn(elements)) {
+				String name = field.getSimpleName().toString();
+				if (configuration.isBlockedField(field)) {
+					blockedProperties.add(name);
+				} else if (configuration.isValidField(field)) {
+					Annotations annotations = new Annotations();
+					configuration.inspect(field, annotations);
+					annotations.addAnnotation(field.getAnnotation(QueryType.class));
+					annotations.addAnnotation(field.getAnnotation(QueryInit.class));
+					propertyAnnotations.put(name, annotations);
+					propertyTypes.put(name, field.asType());
+					TypeMirror fixedType = configuration.getRealType(field);
+					if (fixedType != null) {
+						fixedTypes.put(name, fixedType);
+					}
+				}
+			}
+		}
 
-                if (configuration.isBlockedGetter(method)) {
-                    blockedProperties.add(name);
-                } else if (configuration.isValidGetter(method) && !blockedProperties.contains(name)) {
-                    Annotations annotations = propertyAnnotations.get(name);
-                    if (annotations == null) {
-                        annotations = new Annotations();
-                        propertyAnnotations.put(name, annotations);
-                    }
-                    configuration.inspect(method, annotations);
-                    annotations.addAnnotation(method.getAnnotation(QueryType.class));
-                    annotations.addAnnotation(method.getAnnotation(QueryInit.class));
-                    propertyTypes.put(name, method.getReturnType());
-                    TypeMirror fixedType = configuration.getRealType(method);
-                    if (fixedType != null) {
-                        fixedTypes.put(name, fixedType);
-                    }
-                }
-            }
-        }
+		// methods
+		if (config.visitMethodProperties()) {
+			for (ExecutableElement method : ElementFilter.methodsIn(elements)) {
+				String name = method.getSimpleName().toString();
+				if (name.startsWith("get") && name.length() > 3 && method.getParameters().isEmpty()) {
+					name = BeanUtils.uncapitalize(name.substring(3));
+				} else if (name.startsWith("is") && name.length() > 2 && method.getParameters().isEmpty()) {
+					name = BeanUtils.uncapitalize(name.substring(2));
+				} else {
+					continue;
+				}
 
-        // fixed types override property types
-        propertyTypes.putAll(fixedTypes);
-        for (Map.Entry<String, Annotations> entry : propertyAnnotations.entrySet()) {
-            Property property = toProperty(entityType, entry.getKey(), propertyTypes.get(entry.getKey()), entry.getValue());
-            if (property != null) {
-                entityType.addProperty(property);
-            }
-        }
+				if (configuration.isBlockedGetter(method)) {
+					blockedProperties.add(name);
+				} else if (configuration.isValidGetter(method) && !blockedProperties.contains(name)) {
+					Annotations annotations = propertyAnnotations.get(name);
+					if (annotations == null) {
+						annotations = new Annotations();
+						propertyAnnotations.put(name, annotations);
+					}
+					configuration.inspect(method, annotations);
+					annotations.addAnnotation(method.getAnnotation(QueryType.class));
+					annotations.addAnnotation(method.getAnnotation(QueryInit.class));
+					propertyTypes.put(name, method.getReturnType());
+					TypeMirror fixedType = configuration.getRealType(method);
+					if (fixedType != null) {
+						fixedTypes.put(name, fixedType);
+					}
+				}
+			}
+		}
 
-        return entityType;
-    }
+		// fixed types override property types
+		propertyTypes.putAll(fixedTypes);
+		for (Map.Entry<String, Annotations> entry : propertyAnnotations.entrySet()) {
+			Property property = toProperty(entityType, entry.getKey(), propertyTypes.get(entry.getKey()), entry.getValue());
+			if (property != null) {
+				entityType.addProperty(property);
+			}
+		}
 
+		return entityType;
+	}
 
-    private Property toProperty(EntityType entityType, String name, TypeMirror type,
-            Annotations annotations) {
-        // type
-        Type propertyType = typeFactory.getType(type, true);
-        if (annotations.isAnnotationPresent(QueryType.class)) {
-            PropertyType propertyTypeAnn = annotations.getAnnotation(QueryType.class).value();
-            if (propertyTypeAnn != PropertyType.NONE) {
-                TypeCategory typeCategory = TypeCategory.valueOf(annotations.getAnnotation(QueryType.class).value().name());
-                if (typeCategory == null) {
-                    return null;
-                }
-                propertyType = propertyType.as(typeCategory);
-            } else {
-                return null;
-            }
-        }
+	private void handleIndexes(EntityType entityType, TypeElement element) {
+		Index index = element.getAnnotation(Index.class);
+		Indexes indexes = element.getAnnotation(Indexes.class);
 
-        // inits
-        List<String> inits = Collections.<String>emptyList();
-        if (annotations.isAnnotationPresent(QueryInit.class)) {
-            inits = ImmutableList.copyOf(annotations.getAnnotation(QueryInit.class).value());
-        }
+		List<Index> listIndex = new ArrayList<Index>();
+		if (index != null) {
+			listIndex.add(index);
+		}
+		if (indexes != null) {
+			for (Index idx : indexes.value()) {
+				listIndex.add(idx);
+			}
+		}
 
-        return new Property(entityType, name, propertyType, inits);
-    }
+		if (listIndex.size() > 0) {
+			for (Index idx : listIndex) {
+				Property p = new Property(entityType, "idx_" + idx.name(), new IndexClassType(TypeCategory.INDEX, IndexHint.class, idx.name()));
+				entityType.addProperty(p);
+			}
+		}
+	}
 
+	private Property toProperty(EntityType entityType, String name, TypeMirror type, Annotations annotations) {
+		// type
+		Type propertyType = typeFactory.getType(type, true);
+		if (annotations.isAnnotationPresent(QueryType.class)) {
+			PropertyType propertyTypeAnn = annotations.getAnnotation(QueryType.class).value();
+			if (propertyTypeAnn != PropertyType.NONE) {
+				TypeCategory typeCategory = TypeCategory.valueOf(annotations.getAnnotation(QueryType.class).value().name());
+				if (typeCategory == null) {
+					return null;
+				}
+				propertyType = propertyType.as(typeCategory);
+			} else {
+				return null;
+			}
+		}
 
-    public EntityType handleProjectionType(TypeElement e) {
-        Type c = typeFactory.getType(e.asType(), true);
-        EntityType entityType = new EntityType(c.as(TypeCategory.ENTITY));
-        typeMappings.register(entityType, queryTypeFactory.create(entityType));
-        List<? extends Element> elements = e.getEnclosedElements();
-        handleConstructors(entityType, elements);
-        return entityType;
-    }
+		// inits
+		List<String> inits = Collections.<String> emptyList();
+		if (annotations.isAnnotationPresent(QueryInit.class)) {
+			inits = ImmutableList.copyOf(annotations.getAnnotation(QueryInit.class).value());
+		}
 
-    private Type getType(VariableElement element) {
-        Type rv = typeFactory.getType(element.asType(), true);
-        if (element.getAnnotation(QueryType.class) != null) {
-            QueryType qt = element.getAnnotation(QueryType.class);
-            if (qt.value() != PropertyType.NONE) {
-                TypeCategory typeCategory = TypeCategory.valueOf(qt.value().name());
-                rv = rv.as(typeCategory);
-            }
-        }
-        return rv;
-    }
+		return new Property(entityType, name, propertyType, inits);
+	}
 
-    private void handleConstructors(EntityType entityType, List<? extends Element> elements) {
-        for (ExecutableElement constructor : ElementFilter.constructorsIn(elements)) {
-            if (configuration.isValidConstructor(constructor)) {
-                List<Parameter> parameters = transformParams(constructor.getParameters());
-                entityType.addConstructor(new Constructor(parameters));
-            }
-        }
-    }
+	public EntityType handleProjectionType(TypeElement e) {
+		Type c = typeFactory.getType(e.asType(), true);
+		EntityType entityType = new EntityType(c.as(TypeCategory.ENTITY));
+		typeMappings.register(entityType, queryTypeFactory.create(entityType));
+		List<? extends Element> elements = e.getEnclosedElements();
+		handleConstructors(entityType, elements);
+		return entityType;
+	}
 
-    public List<Parameter> transformParams(List<? extends VariableElement> params) {
-        List<Parameter> parameters = new ArrayList<Parameter>(params.size());
-        for (VariableElement param : params) {
-            Type paramType = getType(param);
-            parameters.add(new Parameter(param.getSimpleName().toString(), paramType));
-        }
-        return parameters;
-    }
+	private Type getType(VariableElement element) {
+		Type rv = typeFactory.getType(element.asType(), true);
+		if (element.getAnnotation(QueryType.class) != null) {
+			QueryType qt = element.getAnnotation(QueryType.class);
+			if (qt.value() != PropertyType.NONE) {
+				TypeCategory typeCategory = TypeCategory.valueOf(qt.value().name());
+				rv = rv.as(typeCategory);
+			}
+		}
+		return rv;
+	}
+
+	private void handleConstructors(EntityType entityType, List<? extends Element> elements) {
+		for (ExecutableElement constructor : ElementFilter.constructorsIn(elements)) {
+			if (configuration.isValidConstructor(constructor)) {
+				List<Parameter> parameters = transformParams(constructor.getParameters());
+				entityType.addConstructor(new Constructor(parameters));
+			}
+		}
+	}
+
+	public List<Parameter> transformParams(List<? extends VariableElement> params) {
+		List<Parameter> parameters = new ArrayList<Parameter>(params.size());
+		for (VariableElement param : params) {
+			Type paramType = getType(param);
+			parameters.add(new Parameter(param.getSimpleName().toString(), paramType));
+		}
+		return parameters;
+	}
 
 }
