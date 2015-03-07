@@ -1,16 +1,18 @@
-/*
- * Copyright 2011, Mysema Ltd
- *
+/*******************************************************************************
+ * Copyright 2012 Anteros Tecnologia
+ *  
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
+ *  
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *******************************************************************************/
 package br.com.anteros.persistence.apt;
 
 import java.lang.annotation.Annotation;
@@ -51,7 +53,8 @@ import com.google.common.collect.ImmutableList;
 /**
  * Configuration for {@link AnterosPersistenceAnnotationProcessor}
  *
- * @author tiwe
+ * @author tiwe  modified by: Edson Martins
+ * 
  * @see AnterosPersistenceAnnotationProcessor
  */
 public class AnterosAptConfiguration extends DefaultConfiguration {
@@ -60,30 +63,22 @@ public class AnterosAptConfiguration extends DefaultConfiguration {
 
 	private final Types types;
 
-	public AnterosAptConfiguration(RoundEnvironment roundEnv,
-			Map<String, String> options, Class<? extends Annotation> entityAnn,
-			Class<? extends Annotation> superTypeAnn,
-			Class<? extends Annotation> embeddableAnn,
-			Class<? extends Annotation> embeddedAnn,
+	public AnterosAptConfiguration(RoundEnvironment roundEnv, Map<String, String> options, Class<? extends Annotation> entityAnn,
+			Class<? extends Annotation> superTypeAnn, Class<? extends Annotation> embeddableAnn, Class<? extends Annotation> embeddedAnn,
 			Class<? extends Annotation> skipAnn) {
-		super(roundEnv, options, Keywords.JPA, QueryEntities.class, entityAnn,
-				superTypeAnn, embeddableAnn, embeddedAnn, skipAnn);
+		super(roundEnv, options, Keywords.JPA, QueryEntities.class, entityAnn, superTypeAnn, embeddableAnn, embeddedAnn, skipAnn);
 		this.annotations = getAnnotations();
 		this.types = AbstractDslProcessor.TYPES;
 	}
 
 	@SuppressWarnings("unchecked")
 	protected List<Class<? extends Annotation>> getAnnotations() {
-		return ImmutableList.of(Column.class, Enumerated.class,
-				GeneratedValue.class, Id.class, CompositeId.class,
-				JoinColumn.class, Fetch.class, MapKeyEnumerated.class,
-				ForeignKey.class, Temporal.class,
-				Version.class, Index.class);
+		return ImmutableList.of(Column.class, Enumerated.class, GeneratedValue.class, Id.class, CompositeId.class, JoinColumn.class, Fetch.class,
+				MapKeyEnumerated.class, ForeignKey.class, Temporal.class, Version.class, Index.class);
 	}
 
 	@Override
-	public VisitorConfig getConfig(TypeElement e,
-			List<? extends Element> elements) {
+	public VisitorConfig getConfig(TypeElement e, List<? extends Element> elements) {
 		boolean fields = false, methods = false;
 		for (Element element : elements) {
 			if (hasRelevantAnnotation(element)) {
@@ -105,16 +100,13 @@ public class AnterosAptConfiguration extends DefaultConfiguration {
 	}
 
 	private TypeMirror getRealElementType(Element element) {
-		AnnotationMirror mirror = getFetchAnnotationMirror(element,
-				FetchMode.ONE_TO_MANY);
+		AnnotationMirror mirror = getFetchAnnotationMirror(element, FetchMode.ONE_TO_MANY);
 
 		if (mirror == null) {
-			mirror = getFetchAnnotationMirror(element,
-					FetchMode.MANY_TO_MANY);
+			mirror = getFetchAnnotationMirror(element, FetchMode.MANY_TO_MANY);
 		}
 		if (mirror != null) {
-			TypeMirror typeArg = TypeUtils.getAnnotationValueAsTypeMirror(
-					mirror, "targetEntity");
+			TypeMirror typeArg = TypeUtils.getAnnotationValueAsTypeMirror(mirror, "targetEntity");
 			TypeMirror erasure = types.erasure(element.asType());
 			TypeElement typeElement = (TypeElement) types.asElement(erasure);
 			if (typeElement != null && typeArg != null) {
@@ -122,10 +114,8 @@ public class AnterosAptConfiguration extends DefaultConfiguration {
 					return types.getDeclaredType(typeElement, typeArg);
 				} else if (typeElement.getTypeParameters().size() == 2) {
 					if (element.asType() instanceof DeclaredType) {
-						TypeMirror first = ((DeclaredType) element.asType())
-								.getTypeArguments().get(0);
-						return types.getDeclaredType(typeElement, first,
-								typeArg);
+						TypeMirror first = ((DeclaredType) element.asType()).getTypeArguments().get(0);
+						return types.getDeclaredType(typeElement, first, typeArg);
 					}
 				}
 			}
@@ -134,8 +124,7 @@ public class AnterosAptConfiguration extends DefaultConfiguration {
 		return null;
 	}
 
-	protected AnnotationMirror getFetchAnnotationMirror(Element element,
-			FetchMode mode) {
+	protected AnnotationMirror getFetchAnnotationMirror(Element element, FetchMode mode) {
 		Fetch fetch = element.getAnnotation(Fetch.class);
 		if (fetch == null)
 			return null;

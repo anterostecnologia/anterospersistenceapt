@@ -1,12 +1,18 @@
-/*
- * Copyright 2011, Mysema Ltd
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
- * applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language
- * governing permissions and limitations under the License.
- */
+/*******************************************************************************
+ * Copyright 2012 Anteros Tecnologia
+ *  
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *******************************************************************************/
 package br.com.anteros.persistence.apt;
 
 import java.util.ArrayList;
@@ -47,7 +53,7 @@ import com.google.common.collect.ImmutableList;
 /**
  * TypeElementHandler is a an APT visitor for entity types
  *
- * @author tiwe
+ * @author tiwe modified by: Edson Martins
  *
  */
 public final class TypeElementHandler { 
@@ -83,7 +89,10 @@ public final class TypeElementHandler {
 		}
 
 		// @Index e @Indexes
-		handleIndexes(entityType, element);
+		/*
+		 * Criado para atender a geração de tipos seguros para os indices nas entidades o que vai permitir usar sugestão de indices para o sql.
+		 */
+		handleIndexes(entityType, element); 
 
 		// fields
 		if (config.visitFieldProperties()) {
