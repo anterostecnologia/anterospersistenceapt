@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.com.anteros</groupId>
 	<artifactId>Anteros-Persistence-Apt</artifactId>
-	<version>0.0.4-SNAPSHOT</version>
+	<version>0.0.5-SNAPSHOT</version>
 
 	<dependencies>
 		<dependency>
@@ -11,6 +11,11 @@
 			<artifactId>Anteros-Core</artifactId>
 			<version>LATEST</version>
 		</dependency>
+		<dependency>
+			<groupId>br.com.anteros</groupId>
+			<artifactId>Anteros-Persistence</artifactId>
+			<version>LATEST</version>
+		</dependency>		
 		<dependency>
 			<groupId>br.com.anteros</groupId>
 			<artifactId>Anteros-Persistence-Core</artifactId>
