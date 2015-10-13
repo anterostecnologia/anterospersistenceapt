@@ -30,6 +30,8 @@ import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Types;
 
+import com.google.common.collect.ImmutableList;
+
 import br.com.anteros.persistence.apt.codegen.Keywords;
 import br.com.anteros.persistence.dsl.osql.annotations.PropertyType;
 import br.com.anteros.persistence.dsl.osql.annotations.QueryEntities;
@@ -47,8 +49,6 @@ import br.com.anteros.persistence.metadata.annotation.MapKeyEnumerated;
 import br.com.anteros.persistence.metadata.annotation.Temporal;
 import br.com.anteros.persistence.metadata.annotation.Version;
 import br.com.anteros.persistence.metadata.annotation.type.FetchMode;
-
-import com.google.common.collect.ImmutableList;
 
 /**
  * Configuration for {@link AnterosPersistenceAnnotationProcessor}
@@ -144,7 +144,7 @@ public class AnterosAptConfiguration extends DefaultConfiguration {
 		}
 		if (temporal != null && !isElementCollection) {
 			PropertyType propertyType = null;
-			switch (temporal.type()) {
+			switch (temporal.value()) {
 			case DATE:
 				propertyType = PropertyType.DATE;
 				break;
