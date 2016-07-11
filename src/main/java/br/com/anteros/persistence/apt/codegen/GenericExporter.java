@@ -39,7 +39,7 @@ import br.com.anteros.persistence.apt.codegen.model.Parameter;
 import br.com.anteros.persistence.apt.codegen.model.Type;
 import br.com.anteros.persistence.apt.codegen.model.TypeCategory;
 import br.com.anteros.persistence.apt.codegen.support.ClassUtils;
-import br.com.anteros.persistence.dsl.osql.QueryException;
+import br.com.anteros.persistence.dsl.osql.FilterException;
 import br.com.anteros.persistence.dsl.osql.annotations.Config;
 import br.com.anteros.persistence.dsl.osql.annotations.PropertyType;
 import br.com.anteros.persistence.dsl.osql.annotations.QueryEmbeddable;
@@ -295,7 +295,7 @@ public class GenericExporter {
             serialize(projectionSerializer, projectionTypes);
 
         } catch (IOException e) {
-            throw new QueryException(e);
+            throw new FilterException(e);
         }
 
     }
@@ -495,7 +495,7 @@ public class GenericExporter {
                     handleClass(cl);
                 }
             } catch (IOException e) {
-                throw new QueryException(e);
+                throw new FilterException(e);
             }
         }
     }
