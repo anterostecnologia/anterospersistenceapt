@@ -15,8 +15,8 @@ package br.com.anteros.persistence.apt.codegen;
 
 import java.util.Collection;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import br.com.anteros.persistence.apt.annotation.InjectApt;
+import br.com.anteros.persistence.apt.annotation.NamedApt;
 
 /**
  * SupertypeSerializer is a {@link Serializer} implementation for supertypes
@@ -32,8 +32,8 @@ public final class SupertypeSerializer extends EntitySerializer{
      * @param typeMappings
      * @param keywords
      */
-    @Inject
-    public SupertypeSerializer(TypeMappings typeMappings, @Named("keywords") Collection<String> keywords) {
+    @InjectApt
+    public SupertypeSerializer(TypeMappings typeMappings, @NamedApt("keywords") Collection<String> keywords) {
         super(typeMappings, keywords);
     }
 

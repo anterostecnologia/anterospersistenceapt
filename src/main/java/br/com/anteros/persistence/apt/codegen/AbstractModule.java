@@ -19,8 +19,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import br.com.anteros.persistence.apt.annotation.InjectApt;
+import br.com.anteros.persistence.apt.annotation.NamedApt;
 
 /**
  * AbstractModule provides a base class for annotation based dependency injection
@@ -113,7 +113,7 @@ public abstract class AbstractModule {
     private <T> T createInstance(Class<? extends T> implementation) {
         Constructor<?> constructor = null;
         for (Constructor<?> c : implementation.getConstructors()) {
-            if (c.getAnnotation(Inject.class) != null) {
+            if (c.getAnnotation(InjectApt.class) != null) {
                 constructor = c;
                 break;
             }
@@ -133,7 +133,7 @@ public abstract class AbstractModule {
         if (constructor != null) {
             Object[] args = new Object[constructor.getParameterTypes().length];
             for (int i = 0; i < constructor.getParameterTypes().length; i++) {
-                Named named = getNamedAnnotation(constructor.getParameterAnnotations()[i]);
+                NamedApt named = getNamedAnnotation(constructor.getParameterAnnotations()[i]);
                 if (named != null) {
                     args[i] = get(constructor.getParameterTypes()[i], named.value());
                 } else {
@@ -157,10 +157,10 @@ public abstract class AbstractModule {
 
     }
 
-    private Named getNamedAnnotation(Annotation[] annotations) {
+    private NamedApt getNamedAnnotation(Annotation[] annotations) {
         for (Annotation annotation : annotations) {
-            if (annotation.annotationType().equals(Named.class)) {
-                return (Named)annotation;
+            if (annotation.annotationType().equals(NamedApt.class)) {
+                return (NamedApt)annotation;
             }
         }
         return null;

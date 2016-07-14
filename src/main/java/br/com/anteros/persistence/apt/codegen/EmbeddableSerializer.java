@@ -17,9 +17,8 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.Collection;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
+import br.com.anteros.persistence.apt.annotation.InjectApt;
+import br.com.anteros.persistence.apt.annotation.NamedApt;
 import br.com.anteros.persistence.apt.codegen.model.ClassType;
 import br.com.anteros.persistence.apt.codegen.model.Type;
 import br.com.anteros.persistence.apt.codegen.model.TypeCategory;
@@ -49,8 +48,8 @@ public final class EmbeddableSerializer extends EntitySerializer {
      * @param typeMappings
      * @param keywords
      */
-    @Inject
-    public EmbeddableSerializer(TypeMappings typeMappings, @Named("keywords") Collection<String> keywords) {
+    @InjectApt
+    public EmbeddableSerializer(TypeMappings typeMappings, @NamedApt("keywords") Collection<String> keywords) {
         super(typeMappings, keywords);
     }
 

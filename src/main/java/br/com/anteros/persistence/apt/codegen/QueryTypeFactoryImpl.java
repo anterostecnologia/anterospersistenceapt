@@ -13,9 +13,8 @@
  */
 package br.com.anteros.persistence.apt.codegen;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
+import br.com.anteros.persistence.apt.annotation.InjectApt;
+import br.com.anteros.persistence.apt.annotation.NamedApt;
 import br.com.anteros.persistence.apt.codegen.model.SimpleType;
 import br.com.anteros.persistence.apt.codegen.model.Type;
 
@@ -29,11 +28,11 @@ public class QueryTypeFactoryImpl implements QueryTypeFactory {
     
     private final String prefix, suffix, packageSuffix;
     
-    @Inject
+    @InjectApt
     public QueryTypeFactoryImpl(
-            @Named(CodegenModule.PREFIX) String prefix, 
-            @Named(CodegenModule.SUFFIX) String suffix, 
-            @Named(CodegenModule.PACKAGE_SUFFIX) String packageSuffix) {
+            @NamedApt(CodegenModule.PREFIX) String prefix, 
+            @NamedApt(CodegenModule.SUFFIX) String suffix, 
+            @NamedApt(CodegenModule.PACKAGE_SUFFIX) String packageSuffix) {
         this.prefix = prefix;
         this.suffix = suffix;
         this.packageSuffix = packageSuffix;

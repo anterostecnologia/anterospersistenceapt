@@ -34,9 +34,14 @@ import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Generated;
-import javax.inject.Inject;
-import javax.inject.Named;
 
+import com.google.common.base.Function;
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+
+import br.com.anteros.persistence.apt.annotation.InjectApt;
+import br.com.anteros.persistence.apt.annotation.NamedApt;
 import br.com.anteros.persistence.apt.codegen.model.ClassType;
 import br.com.anteros.persistence.apt.codegen.model.Constructor;
 import br.com.anteros.persistence.apt.codegen.model.IndexClassType;
@@ -69,12 +74,6 @@ import br.com.anteros.persistence.dsl.osql.types.path.SetPath;
 import br.com.anteros.persistence.dsl.osql.types.path.SimplePath;
 import br.com.anteros.persistence.dsl.osql.types.path.StringPath;
 import br.com.anteros.persistence.dsl.osql.types.path.TimePath;
-import br.com.anteros.persistence.dsl.osql.util.BeanUtils;
-
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 /**
  * EntitySerializer is a {@link Serializer} implementation for entity types
@@ -102,8 +101,8 @@ public class EntitySerializer implements Serializer {
 	 * @param mappings
 	 * @param keywords
 	 */
-	@Inject
-	public EntitySerializer(TypeMappings mappings, @Named("keywords") Collection<String> keywords) {
+	@InjectApt
+	public EntitySerializer(TypeMappings mappings, @NamedApt("keywords") Collection<String> keywords) {
 		this.typeMappings = mappings;
 		this.keywords = keywords;
 	}

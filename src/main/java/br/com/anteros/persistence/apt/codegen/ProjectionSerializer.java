@@ -17,8 +17,11 @@ import java.io.IOException;
 import java.util.Set;
 
 import javax.annotation.Generated;
-import javax.inject.Inject;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Sets;
+
+import br.com.anteros.persistence.apt.annotation.InjectApt;
 import br.com.anteros.persistence.apt.codegen.model.ClassType;
 import br.com.anteros.persistence.apt.codegen.model.Constructor;
 import br.com.anteros.persistence.apt.codegen.model.Parameter;
@@ -29,9 +32,6 @@ import br.com.anteros.persistence.apt.codegen.model.Types;
 import br.com.anteros.persistence.dsl.osql.types.ConstructorExpression;
 import br.com.anteros.persistence.dsl.osql.types.Expression;
 import br.com.anteros.persistence.dsl.osql.types.expr.NumberExpression;
-
-import com.google.common.base.Function;
-import com.google.common.collect.Sets;
 
 /**
  * ProjectionSerializer is a {@link Serializer} implementation for projection types
@@ -48,7 +48,7 @@ public final class ProjectionSerializer implements Serializer{
      *
      * @param typeMappings
      */
-    @Inject
+    @InjectApt
     public ProjectionSerializer(TypeMappings typeMappings) {
         this.typeMappings = typeMappings;
     }
