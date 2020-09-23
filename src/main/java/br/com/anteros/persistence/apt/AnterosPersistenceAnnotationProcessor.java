@@ -32,7 +32,7 @@ public class AnterosPersistenceAnnotationProcessor extends AbstractDslProcessor 
     protected Configuration createConfiguration(RoundEnvironment roundEnv) {
         Class<? extends Annotation> entity = Entity.class;
         Class<? extends Annotation> superType = MappedSuperclass.class;
-        Class<? extends Annotation> embeddable = null;
+        Class<? extends Annotation> embeddable = null; 
         Class<? extends Annotation> embedded = null;
         Class<? extends Annotation> skip = Transient.class;
         return new AnterosAptConfiguration(roundEnv, processingEnv.getOptions(),
